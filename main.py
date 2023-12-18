@@ -4,6 +4,7 @@ from datetime import datetime
 import pytz
 import os.path
 
+
 def add_event_to_ics_file(start_date, end_date, event_name, additional_notes, location):
     # Überprüfe, ob die Datei bereits existiert
     ics_filename = "my_events.ics"
@@ -20,6 +21,11 @@ def add_event_to_ics_file(start_date, end_date, event_name, additional_notes, lo
         event.add('dtend', end_date)
         event.add('description', additional_notes)
         event.add('location', location)
+        event.add('dtstamp', datetime.now(tz=pytz.UTC))
+
+        # Bilde die UID aus dem Summary und dem DTSTART
+        uid_str = f"{event_name}{start_date.strftime('%Y%m%dT%H%M%S')}"
+        event.add('uid', uid_str)
 
         # Füge das Ereignis zur Kalender-Instanz hinzu
         cal.add_component(event)
@@ -32,18 +38,28 @@ def add_event_to_ics_file(start_date, end_date, event_name, additional_notes, lo
     else:
         # Erstelle eine neue Datei mit dem Ereignis
         cal = Calendar()
+        cal.add('prodid', '-//My calendar product//mxm.dk//')
+        cal.add('version', '2.0')
+
         event = Event()
         event.add('summary', event_name)
         event.add('dtstart', start_date)
         event.add('dtend', end_date)
         event.add('description', additional_notes)
         event.add('location', location)
+        event.add('dtstamp', datetime.now(tz=pytz.UTC))
+
+        # Bilde die UID aus dem Summary und dem DTSTART
+        uid_str = f"{event_name}{start_date.strftime('%Y%m%dT%H%M%S')}"
+        event.add('uid', uid_str)
+
         cal.add_component(event)
 
         with open(ics_filename, 'wb') as f:
             f.write(cal.to_ical())
 
         sg.popup("Die Datei wurde erfolgreich erstellt!")
+
 
 # Erstelle das Userinterface
 layout = [
