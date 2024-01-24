@@ -7,7 +7,7 @@ import os.path
 
 def add_event_to_ics_file(start_date, end_date, event_name, additional_notes, location):
     # Überprüfe, ob die Datei bereits existiert
-    ics_filename = "my_events.ics"
+    ics_filename = "termine_jdk.ics"
     if os.path.isfile(ics_filename):
         # Öffne die Datei und lese die vorhandenen Ereignisse
         with open(ics_filename, 'rb') as f:
@@ -21,7 +21,7 @@ def add_event_to_ics_file(start_date, end_date, event_name, additional_notes, lo
         event.add('dtend', end_date)
         event.add('description', additional_notes)
         event.add('location', location)
-        event.add('dtstamp', datetime.now(tz=pytz.UTC))
+        event.add('dtstamp', datetime.now(tz=pytz.timezone('Europe/Berlin')))
 
         # Bilde die UID aus dem Summary und dem DTSTART
         uid_str = f"{event_name}{start_date.strftime('%Y%m%dT%H%M%S')}"
@@ -47,7 +47,7 @@ def add_event_to_ics_file(start_date, end_date, event_name, additional_notes, lo
         event.add('dtend', end_date)
         event.add('description', additional_notes)
         event.add('location', location)
-        event.add('dtstamp', datetime.now(tz=pytz.UTC))
+        event.add('dtstamp', datetime.now(tz=pytz.timezone('Europe/Berlin')))
 
         # Bilde die UID aus dem Summary und dem DTSTART
         uid_str = f"{event_name}{start_date.strftime('%Y%m%dT%H%M%S')}"
@@ -85,8 +85,8 @@ while True:
         start_time = datetime.strptime(values[1], '%H:%M')
         end_date = datetime.strptime(values[2], '%d.%m.%Y')
         end_time = datetime.strptime(values[3], '%H:%M')
-        start_date = datetime.combine(start_date, start_time.time(), tzinfo=pytz.UTC)
-        end_date = datetime.combine(end_date, end_time.time(), tzinfo=pytz.UTC)
+        start_date = datetime.combine(start_date, start_time.time(), tzinfo=pytz.timezone('Europe/Berlin'))
+        end_date = datetime.combine(end_date, end_time.time(), tzinfo=pytz.timezone('Europe/Berlin'))
         event_name = values[4]
         additional_notes = values[5]
         location = values[6]
